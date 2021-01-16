@@ -101,7 +101,7 @@ else{
 d3.json(link, function(data) {
   var geo = data.features;
   
- // console.log(geo2);
+ console.log(geo);
   arrayList = [], obj_c_processed = [];
   var counts = 0;
   var totalcount =0;
@@ -186,13 +186,13 @@ var myMap = L.map("map", {
 });
 
 // Adding tile layer
-L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v10.html?access_token={accessToken}", {
+L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
   tileSize: 512,
   maxZoom: 2,
   minZoom: 2,
   zoomOffset: -1,
-  id: "mapbox/streets-v11",
+  id: "mapbox/dark-v10",
   accessToken: API_KEY
 }).addTo(myMap);
 
@@ -277,6 +277,33 @@ legend.onAdd = function (map) {
 legend.addTo(myMap);
 
 
+var showfatal;
+var shownofatal;
+// var golfdata = $.getJSON("golf.js");
+document.getElementById("table-container").innerHTML = '<table id="mytable" class="table table-striped table-bordered"> <thead><tr><th>Country</th><th>Cases</th><th>Fatal</th><th>None Fatal</th></thead><tbody id="tbod"></tbody></table>';
+  
+myGeoJSON.features.forEach(function(myGeoJSON) {
+    if (myGeoJSON.fatal == null){
+      showfatal = 0;
+    }
+    else{
+      showfatal = myGeoJSON.fatal;
+    }
+    if (myGeoJSON.none_fatal == null){
+      shownofatal = 0;
+    }
+    else{
+      shownofatal = myGeoJSON.none_fatal;
+    }
+    document.getElementById("tbod").innerHTML += "<tr><td>" + myGeoJSON.properties + "</td><td>" + myGeoJSON.count + "</td><td>"+showfatal+ "</td><td>" +shownofatal + "</tr>";
+
+  });
+
+  $(document).ready(function() {
+    $('#mytable').DataTable({
+      responsive: true
+    });
+  } );
 });
 
 
